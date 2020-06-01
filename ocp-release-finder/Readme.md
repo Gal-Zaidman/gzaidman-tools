@@ -25,4 +25,9 @@ Under the openshift organization we have various github repos and each merged PR
    ```base
    ./ocp-release-finder https://github.com/openshift/console/pull/5628 --debug
    ```
+ 
+## Important note
 
+This tool will work only one PRs that are newlly merged PRs and have releases on [Openshift release page](openshift-release.svc.ci.openshift.org) that don't contain them.
+The reason is that this tool is a web crawler that automate the manualy process so if the PR is old then all the release will contain it, and it will not find it in any release page.
+In the future I will add logic to inform the user in that case.
