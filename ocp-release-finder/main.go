@@ -31,7 +31,7 @@ var prd PullRequestData
 var releaseStatusCrawler *colly.Collector
 var releasePageCrawler *colly.Collector
 
-const OPENSHIFT_RELEASE_DOMAIN string = "openshift-release.svc.ci.openshift.org"
+const OPENSHIFT_RELEASE_DOMAIN string = "openshift-release.apps.ci.l2s4.p1.openshiftapps.com" //"openshift-release.svc.ci.openshift.org"
 const PR_DATE_FORMAT string = "2006-01-02-150405"
 
 // Gets a PR URL and returns the organization, repo and ID of that PR.
@@ -93,7 +93,7 @@ func createPullRequestData(prURL string) (PullRequestData, error) {
 }
 
 func filterReleasesLinks(e *colly.HTMLElement) {
-	reRelease := regexp.MustCompile(`\d\.\d\.\d-\d\.(nightly|ci)-\d{4}-\d{2}-\d{2}-\d{6}`)
+	reRelease := regexp.MustCompile(`\d\.\d+\.\d-\d\.(nightly|ci)-\d{4}-\d{2}-\d{2}-\d{6}`)
 	if !reRelease.MatchString(e.Text) {
 		return
 	}
@@ -102,7 +102,7 @@ func filterReleasesLinks(e *colly.HTMLElement) {
 	d = strings.Split(d, " ")[0]
 	tr, err := time.Parse(PR_DATE_FORMAT, d)
 	if err != nil {
-		fmt.Printf("Error time.Parse: ", err)
+		fmt.Printf("Error time.Parse: %v ", err)
 	}
 	// Check if PR merge time t is after the release creation time tr
 	if prd.mDate.After(tr) {
